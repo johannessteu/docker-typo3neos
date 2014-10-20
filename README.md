@@ -15,7 +15,7 @@ Make sure to change your database password.
 
 To run the TYPO3 Neos docker run this command:
 
-`docker run --name neos -d -p 8080:80 --link neos-mysql:db johannessteu/neos`
+`docker run --name neos -d -p 8080:80 --link neos-mysql:db johannessteu/typo3neos`
 
 Now give docker 1-2 min to set everything up. Your Installation is available by <your-servers-domain>:8080 .
 If the port 8080 is already taken by another application you can change that easily e.g. to 8081 in the run command by using 
