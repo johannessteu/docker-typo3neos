@@ -18,7 +18,7 @@ RUN curl -s https://getcomposer.org/installer | php &&  mv composer.phar /usr/lo
 RUN cd /var/www && composer create-project --no-dev typo3/neos-base-distribution neos
 
 ADD configure-neos.sh /configure-neos.sh
-ADD assets/* /assets/./
+ADD assets/*.conf /assets/./
 
 RUN chmod +x /configure-neos.sh
 
