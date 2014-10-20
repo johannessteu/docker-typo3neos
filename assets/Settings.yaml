@@ -1,0 +1,18 @@
+#                                                                        #
+# Example Settings                                                       #
+#                                                                        #
+# This file contains settings for various parts of the application.      #
+# Copy this file to Settings.yaml, and adjust as necessary.              #
+#                                                                        #
+# Please refer to the default settings file(s) or the manuals for        #
+# possible configuration options.                                        #
+#                                                                        #
+
+TYPO3:
+  Flow:
+    persistence:
+      backendOptions:
+        host: 'DB_HOST'
+        dbname: 'neos'
+        user: 'root'
+        password: 'DB_PASSWORD'
