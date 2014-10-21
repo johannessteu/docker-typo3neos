@@ -14,8 +14,9 @@ RUN echo 'date.timezone = "Europe/Berlin"' >> /etc/php5/apache2/php.ini
 # install composer
 RUN curl -s https://getcomposer.org/installer | php &&  mv composer.phar /usr/local/bin/composer
 
-# configure typo3neos
-RUN cd /var/www && composer create-project --no-dev typo3/neos-base-distribution neos
+# Checkout typo3neos
+RUN cd /var/www && git clone http://git.typo3.org/Neos/Distributions/Base.git neos
+RUN cd /var/www/neos && git checkout 1.1.2 && composer install
 
 ADD configure-neos.sh /configure-neos.sh
 ADD assets/Settings.yaml /assets/Settings.yaml

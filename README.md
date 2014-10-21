@@ -2,8 +2,7 @@
 
 ## Overview
 This docker provides a simple Installation for a fresh TYPO3 Neos instance. This docker installs a fresh new 
-TYPO3 Neos 1.1.2 instance and imports the Demo Package.
-
+TYPO3 Neos instance and imports the Demo Package. You can choose wether to use a stable or the current master version
 
 ## Installation
 Right now the setup is really basic. All you need is a container to wrap your database and run this TYPO3 Neos docker
@@ -25,10 +24,27 @@ To login to the backend open <your-servers-domain>:8080/neos.
 User: admin
 Password: password
 
+## Options
+There are several options to configure your TYPO3 Neos installation.
+
+### Version
+TYPO3 Neos will be installed per default in the current stable version (1.1.2). If you would rather like to work on the current master
+to check out all new stuff you can provide the EnvVar VERSION. VERSION can be any branch, tag or commit on the [TYPO3.Neos git-repository](https://git.typo3.org/Neos/Distributions/Base.git).
+
+So if you would like to start TYPO3 Neos in master version run this command:
+
+`docker run --name neos -d -p 8080:80 --link neos-mysql:db -e VERSION=master johannessteu/typo3neos`
+
+### Context
+TYPO3 Neos can run in three different contexts: Production (which is the default), Development and Testing. You can Start
+TYPO3 Neos by providing the EnvVar CONTEXT. To run Neos in Development Mode run this docker with:
+
+`docker run --name neos -d -o 8080:80 --link neos-mysql:db -e CONTEXT=Development johannessteu/typo3neos`
+
+
 ## Upcoming
 - Make db-container more configurable
-- Provide an data-container
-- Choose the Context Neos should run in (Development / Production / Testing)
+- Data-container
 - Provide credentials for a new backend-user
 - Kickstart a new Site by default
 - Install additional plugins/packages via composer
