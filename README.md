@@ -19,7 +19,7 @@ To run the TYPO3 Neos docker run this command:
 
 Now give docker 1-2 min to set everything up. Your Installation is available by <your-servers-domain>:8080 .
 If the port 8080 is already taken by another application you can change that easily e.g. to 8081 in the run command by using 
--p 8081:80.
+-p 8081:80. You can watch the installation process ty taking a look to the logs via "docker logs -f neos"
 
 To login to the backend open <your-servers-domain>:8080/neos.
 User: admin

@@ -19,9 +19,7 @@ RUN cd /var/www && composer create-project --no-dev typo3/neos-base-distribution
 
 ADD configure-neos.sh /configure-neos.sh
 ADD assets/Settings.yaml /assets/Settings.yaml
-ADD assets/neos-dev.conf /assets/neos-dev.conf
-ADD assets/neos-prod.conf /assets/neos-prod.conf
-ADD assets/neos-test.conf /assets/neos-test.conf
+ADD assets/neos-vhost.conf /assets/neos-vhost.conf
 
 RUN chmod +x /configure-neos.sh
 
