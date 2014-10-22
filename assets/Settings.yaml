@@ -13,6 +13,6 @@ TYPO3:
     persistence:
       backendOptions:
         host: 'DB_HOST'
-        dbname: 'neos'
+        dbname: 'DB_NAME'
         user: 'root'
         password: 'DB_PASSWORD'

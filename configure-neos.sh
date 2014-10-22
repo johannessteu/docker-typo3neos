@@ -1,22 +1,45 @@
 #!/bin/sh
-# Setup Database Variables
 
-# Checkout Neos version if provided
 cd /var/www/neos
 
+# Default vars
+[ -z "${DB_NAME}" ] && DB_NAME=neos
+[ -z "${NEOS_USER}" ] && NEOS_USER=admin
+[ -z "${NEOS_PASSWORD}" ] && NEOS_PASSWORD=password
+[ -z "${NEOS_FIRSTNAME}" ] && NEOS_FIRSTNAME=John
+[ -z "${NEOS_LASTNAME}" ] && NEOS_LASTNAME=Doe
+[ -z "${NEOS_SITE}" ] && NEOS_SITE=TYPO3.NeosDemoTypo3Org
+
+# Checkout another version if necessary
 if [ -n "${VERSION}" ]
 	then
-		echo "--- Try to checkout Git at ${VERSION}"
+		echo "*** Checkout Git at ${VERSION}"
 		git checkout ${VERSION}
+fi
+
+# Require additional packages
+if [ -n "${PACKAGES}" ]
+	then
+		export IFS=";"
+		for package in ${PACKAGES}; do
+			echo "Require composer package $package"
+			composer require --no-update "$package"
+		done
+fi
+
+# Install changes if needed
+if [ -n "${VERSION}" -o -n "${PACKAGES}" ]
+	then
+		echo "run composer install now"
 		rm composer.lock
 		composer --no-dev install
 fi
 
-# Create database
-mysql -h ${DB_PORT_3306_TCP_ADDR} -u root -p${DB_ENV_MYSQL_ROOT_PASSWORD} -e "CREATE DATABASE IF NOT EXISTS neos DEFAULT CHARACTER SET utf8"
-
-echo "--- Configure Neos' Context"
+echo "*** Configure Neos' Context"
 cp /assets/neos-vhost.conf /etc/apache2/sites-available/neos-vhost.conf
+
+# Create database
+mysql -h ${DB_PORT_3306_TCP_ADDR} -u root -p${DB_ENV_MYSQL_ROOT_PASSWORD} -e "CREATE DATABASE IF NOT EXISTS ${DB_NAME} DEFAULT CHARACTER SET utf8"
 
 # Set Context
 if [ $CONTEXT="Production" -o $CONTEXT="Development" -o $CONTEXT="Testing" ]
@@ -27,33 +50,36 @@ if [ $CONTEXT="Production" -o $CONTEXT="Development" -o $CONTEXT="Testing" ]
 		sed -i s/NEOS_CONTEXT/${CONTEXT}/g /etc/apache2/sites-available/neos-vhost.conf
 fi
 
-echo "--- Activate vhost"
+echo "*** Activate vhost"
 cd /etc/apache2/sites-available/ && a2ensite neos-vhost.conf
 
-echo "--- Updating Settings.yaml"
+echo "*** Updating Settings.yaml"
 cp /assets/Settings.yaml /var/www/neos/Configuration/${CONTEXT}/Settings.yaml
 cd /var/www/neos/Configuration/${CONTEXT}
 sed -i s/DB_HOST/${DB_PORT_3306_TCP_ADDR}/g Settings.yaml
 sed -i s/DB_PASSWORD/${DB_ENV_MYSQL_ROOT_PASSWORD}/g Settings.yaml
+sed -i s/DB_NAME/${DB_NAME}/g Settings.yaml
 
 # Set inital databases
-echo "--- Inital databse-migration"
+echo "*** Inital databse migration"
 FLOW_CONTEXT=${CONTEXT} /var/www/neos/flow doctrine:migrate
 
-# Import Demo-Backage and migrate again
-echo "--- Import the TYPO3.Neos Demo-Package and create a new admin user"
-FLOW_CONTEXT=${CONTEXT} /var/www/neos/flow site:import --package-key TYPO3.NeosDemoTypo3Org
-FLOW_CONTEXT=${CONTEXT} /var/www/neos/flow user:create admin password John Doe --roles TYPO3.Neos:Administrator
+# Import demo site and migrate again
+echo "*** Import the TYPO3.Neos demo package and create a new admin user"
+FLOW_CONTEXT=${CONTEXT} /var/www/neos/flow site:import --package-key ${NEOS_SITE}
+FLOW_CONTEXT=${CONTEXT} /var/www/neos/flow user:create ${NEOS_USER} ${NEOS_PASSWORD} ${NEOS_FIRSTNAME} ${NEOS_LASTNAME} --roles TYPO3.Neos:Administrator
 FLOW_CONTEXT=${CONTEXT} /var/www/neos/flow doctrine:migrate
 
 # Flush all caches and warm them up
-echo "--- Warmup the cache"
+echo "*** Warmup the cache"
 FLOW_CONTEXT=${CONTEXT} /var/www/neos/flow flow:cache:flush
 FLOW_CONTEXT=${CONTEXT} /var/www/neos/flow flow:cache:warmup
 
-# Fix all filepermissions and warmul all caches
-echo "--- Fixing all file permissions"
+# Fix all filepermissions
+echo "*** Fixing all file permissions"
 cd /var/www/neos/ && ./flow flow:core:setfilepermissions www-data www-data www-data
 
-echo "--- You are ready to go - have fun wiht your new TYPO3 Neos installation!"
+echo "*** You are ready to go - have fun with your new TYPO3 Neos installation!"
+
+# Start apache
 exec /usr/sbin/apache2ctl -D FOREGROUND
