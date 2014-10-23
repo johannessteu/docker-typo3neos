@@ -1,14 +1,27 @@
 #!/bin/sh
 
+echo "*** Start setup Neos"
+
 cd /var/www/neos
 
 # Default vars
-[ -z "${DB_NAME}" ] && DB_NAME=neos
-[ -z "${NEOS_USER}" ] && NEOS_USER=admin
-[ -z "${NEOS_PASSWORD}" ] && NEOS_PASSWORD=password
-[ -z "${NEOS_FIRSTNAME}" ] && NEOS_FIRSTNAME=John
-[ -z "${NEOS_LASTNAME}" ] && NEOS_LASTNAME=Doe
-[ -z "${NEOS_SITE}" ] && NEOS_SITE=TYPO3.NeosDemoTypo3Org
+[ -z ${DATABASE_NAME} ] && DATABASE_NAME=neos
+[ -z ${NEOS_USER} ] && NEOS_USER=admin
+[ -z ${NEOS_PASSWORD} ] && NEOS_PASSWORD=password
+[ -z ${NEOS_FIRSTNAME} ] && NEOS_FIRSTNAME=John
+[ -z ${NEOS_LASTNAME} ] && NEOS_LASTNAME=Doe
+[ -z ${NEOS_SITE} ] && NEOS_SITE=TYPO3.NeosDemoTypo3Org
+
+echo "Neos will be installed with this environment with this vars:"
+echo "DB-Name: ${DATABASE_NAME}"
+echo "User login: ${NEOS_USER}"
+echo "User PW: ${NEOS_PASSWORD}"
+echo "User Firstname: ${NEOS_FIRSTNAME}"
+echo "User Lastname: ${NEOS_LASTNAME}"
+echo "Site package: ${NEOS_SITE}"
+echo "Additional Packages: ${PACKAGES}"
+echo "in Version: ${VERSION}"
+echo "---------"
 
 # Checkout another version if necessary
 if [ -n "${VERSION}" ]
@@ -39,7 +52,7 @@ echo "*** Configure Neos' Context"
 cp /assets/neos-vhost.conf /etc/apache2/sites-available/neos-vhost.conf
 
 # Create database
-mysql -h ${DB_PORT_3306_TCP_ADDR} -u root -p${DB_ENV_MYSQL_ROOT_PASSWORD} -e "CREATE DATABASE IF NOT EXISTS ${DB_NAME} DEFAULT CHARACTER SET utf8"
+mysql -h ${DB_PORT_3306_TCP_ADDR} -u root -p${DB_ENV_MYSQL_ROOT_PASSWORD} -e "CREATE DATABASE IF NOT EXISTS ${DATABASE_NAME} DEFAULT CHARACTER SET utf8"
 
 # Set Context
 if [ $CONTEXT="Production" -o $CONTEXT="Development" -o $CONTEXT="Testing" ]
@@ -58,7 +71,7 @@ cp /assets/Settings.yaml /var/www/neos/Configuration/${CONTEXT}/Settings.yaml
 cd /var/www/neos/Configuration/${CONTEXT}
 sed -i s/DB_HOST/${DB_PORT_3306_TCP_ADDR}/g Settings.yaml
 sed -i s/DB_PASSWORD/${DB_ENV_MYSQL_ROOT_PASSWORD}/g Settings.yaml
-sed -i s/DB_NAME/${DB_NAME}/g Settings.yaml
+sed -i s/DB_NAME/${DATABASE_NAME}/g Settings.yaml
 
 # Set inital databases
 echo "*** Inital databse migration"
