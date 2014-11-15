@@ -18,6 +18,7 @@ RUN curl -s https://getcomposer.org/installer | php &&  mv composer.phar /usr/lo
 
 # Checkout typo3neos
 RUN cd /var/www && git clone http://git.typo3.org/Neos/Distributions/Base.git neos
+RUN cd /var/www/neos && git fetch
 RUN cd /var/www/neos && git checkout 1.1.2 && composer --no-dev install
 
 ADD configure-neos.sh /configure-neos.sh

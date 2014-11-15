@@ -43,9 +43,9 @@ There are several options available to configure your TYPO3 Neos installation.
 TYPO3 Neos will be installed per default in the current stable version (1.1.2). If you would rather like to work on the current master
 to check out all new stuff you can provide the EnvVar VERSION. VERSION can be any branch, tag or commit on the [TYPO3.Neos git-repository](https://git.typo3.org/Neos/Distributions/Base.git).
 
-So if you would like to start TYPO3 Neos in master version run this command:
+So if you would like to test TYPO3 Neos 1.2 beta run this command:
 
-`docker run --name neos -d -p 8080:80 --link neos-mysql:db -e VERSION=master johannessteu/typo3neos`
+`docker run --name neos -d -p 8080:80 --link neos-mysql:db -e VERSION=1.2 johannessteu/typo3neos`
 
 ### Context
 TYPO3 Neos can run in three different contexts: Production (which is the default), Development and Testing. You can Start
