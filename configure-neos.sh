@@ -27,7 +27,7 @@ echo "---------"
 if [ -n "${VERSION}" ]
 	then
 		echo "*** Checkout Git at ${VERSION}"
-		git checkout ${VERSION}
+		git fetch && git checkout ${VERSION}
 fi
 
 # Require additional packages
