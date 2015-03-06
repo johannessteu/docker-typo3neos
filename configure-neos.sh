@@ -74,7 +74,7 @@ sed -i s/DB_PASSWORD/${DB_ENV_MYSQL_ROOT_PASSWORD}/g Settings.yaml
 sed -i s/DB_NAME/${DATABASE_NAME}/g Settings.yaml
 
 # Set inital databases
-echo "*** Inital databse migration"
+echo "*** Initial databse migration"
 FLOW_CONTEXT=${CONTEXT} /var/www/neos/flow doctrine:migrate
 
 # Import demo site and migrate again
