@@ -12,7 +12,7 @@ cd /var/www/neos
 [ -z ${NEOS_LASTNAME} ] && NEOS_LASTNAME=Doe
 [ -z ${NEOS_SITE} ] && NEOS_SITE=TYPO3.NeosDemoTypo3Org
 
-echo "Neos will be installed with this environment with this vars:"
+echo "Neos will be installed with this environment and with this vars:"
 echo "DB-Name: ${DATABASE_NAME}"
 echo "User login: ${NEOS_USER}"
 echo "User PW: ${NEOS_PASSWORD}"
