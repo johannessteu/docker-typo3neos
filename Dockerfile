@@ -6,7 +6,7 @@ MAINTAINER Johannes Steu <js@johannessteu.de>
 # Setup apache2
 RUN apt-get update && apt-get -y install git apache2 php5 php5-apcu php5-mysql graphicsmagick php5-gd mysql-client curl && apt-get clean
 RUN a2enmod rewrite
-RUn a2dissite 000-default.conf
+RUN a2dissite 000-default.conf
 
 RUN echo 'date.timezone = "Europe/Berlin"' >> /etc/php5/cli/php.ini
 RUN echo 'date.timezone = "Europe/Berlin"' >> /etc/php5/apache2/php.ini

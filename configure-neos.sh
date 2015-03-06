@@ -12,7 +12,7 @@ cd /var/www/neos
 [ -z ${NEOS_LASTNAME} ] && NEOS_LASTNAME=Doe
 [ -z ${NEOS_SITE} ] && NEOS_SITE=TYPO3.NeosDemoTypo3Org
 
-echo "Neos will be installed with this environment with this vars:"
+echo "Neos will be installed with this environment and with this vars:"
 echo "DB-Name: ${DATABASE_NAME}"
 echo "User login: ${NEOS_USER}"
 echo "User PW: ${NEOS_PASSWORD}"
@@ -74,7 +74,7 @@ sed -i s/DB_PASSWORD/${DB_ENV_MYSQL_ROOT_PASSWORD}/g Settings.yaml
 sed -i s/DB_NAME/${DATABASE_NAME}/g Settings.yaml
 
 # Set inital databases
-echo "*** Inital databse migration"
+echo "*** Initial databse migration"
 FLOW_CONTEXT=${CONTEXT} /var/www/neos/flow doctrine:migrate
 
 # Import demo site and migrate again
